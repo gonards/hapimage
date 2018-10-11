@@ -1,7 +1,7 @@
 package main
 
-import "hapimage/mydb"
+import "hapimage/api"
 
 func main() {
-	mydb.Skeleton()
+	api.NewServer()
 }
