@@ -11,6 +11,7 @@ type Comment struct {
 	ID       uint64 `gorm:"primary_key"`
 	Username string
 	Content  string
+	Photo    Photo
 	PhotoID  uint64
 }
 

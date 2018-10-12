@@ -17,8 +17,8 @@ type Photo struct {
 	Like        int
 	Country     Country
 	CountryID   uint
-	Tags        []Tag     `gorm:"many2many:photo_tags;"`
-	Comments    []Comment 
+	Tags        []Tag `gorm:"many2many:photo_tags;"`
+	Comments    []Comment
 }
 
 // GetPhoto return a photo from specific id
@@ -49,4 +49,15 @@ func (s *Srv) GetComments(c *gin.Context) {
 	var comments []Comment
 	s.DB.Model(&Photo{ID: id}).Related(&comments)
 	c.JSON(http.StatusOK, gin.H{"success": comments})
+}
+
+// GetTagsFromPhoto return all tags from a photo
+func (s *Srv) GetTagsFromPhoto(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	var tags []Tag
+	s.DB.Model(&Photo{ID: id}).Related(&tags)
+	c.JSON(http.StatusOK, gin.H{"success": tags})
 }

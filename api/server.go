@@ -40,9 +40,11 @@ func NewServer() {
 	{
 		v1.GET("/photo/:id", s.GetPhoto)
 		v1.GET("/photo/:id/comments", s.GetComments)
+		v1.GET("/photo/:id/tags", s.GetTagsFromPhoto)
 		v1.POST("/photo", s.PostPhoto)
 
 		v1.GET("/card/:id", s.GetCard)
+		v1.GET("/cards", s.GetCards)
 		v1.POST("/card", s.PostCard)
 
 		v1.GET("/comment/:id", s.GetComment)
@@ -52,6 +54,7 @@ func NewServer() {
 		v1.POST("/country", s.PostCountry)
 
 		v1.GET("/tag/:id", s.GetTag)
+		v1.GET("/tag/:id/photos", s.GetPhotosFromTags)
 		v1.POST("/tag", s.PostTag)
 	}
 	r.Run(":8080")

@@ -36,3 +36,14 @@ func (s *Srv) PostTag(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 }
+
+// GetPhotosFromTags return all photos from a tag
+func (s *Srv) GetPhotosFromTags(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	var photos []Photo
+	s.DB.Model(&Tag{ID: id}).Related(&photos)
+	c.JSON(http.StatusOK, gin.H{"success": photos})
+}
