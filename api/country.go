@@ -1,4 +1,4 @@
-package models
+package api
 
 import (
 	"net/http"
@@ -13,12 +13,10 @@ type Country struct {
 }
 
 // GetCountry return a country from specific id
-func GetCountry(c *gin.Context) {
+func (s *Srv) GetCountry(c *gin.Context) {
 	id := c.Param("id")
 	var country Country
-	db := openConnection()
-	defer db.Close()
-	if db.Debug().First(&country, id).Error != nil {
+	if s.DB.First(&country, id).Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Country not found " + id})
 	} else {
 		c.JSON(http.StatusOK, country)
@@ -26,12 +24,10 @@ func GetCountry(c *gin.Context) {
 }
 
 // PostCountry create a country
-func PostCountry(c *gin.Context) {
+func (s *Srv) PostCountry(c *gin.Context) {
 	var country Country
-	db := openConnection()
-	defer db.Close()
 	if err := c.Bind(&country); err == nil {
-		db.Create(&country)
+		s.DB.Create(&country)
 		c.JSON(http.StatusOK, gin.H{"success": country})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

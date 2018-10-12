@@ -1,4 +1,4 @@
-package models
+package api
 
 import (
 	"net/http"
@@ -21,22 +21,18 @@ type Photo struct {
 }
 
 // GetPhoto return a photo from specific id
-func GetPhoto(c *gin.Context) {
+func (s *Srv) GetPhoto(c *gin.Context) {
 	id := c.Param("id")
 	var photo Photo
-	db := openConnection()
-	defer db.Close()
-	db.Where("ID = ?", id).First(&photo)
+	s.DB.Where("ID = ?", id).First(&photo)
 	c.JSON(http.StatusOK, photo)
 }
 
 // PostPhoto create a photo
-func PostPhoto(c *gin.Context) {
+func (s *Srv) PostPhoto(c *gin.Context) {
 	var photo Photo
-	db := openConnection()
-	defer db.Close()
 	if err := c.Bind(&photo); err == nil {
-		db.Create(&photo)
+		s.DB.Create(&photo)
 		c.JSON(http.StatusOK, gin.H{"success": photo})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

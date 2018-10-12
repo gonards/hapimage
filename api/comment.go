@@ -1,4 +1,4 @@
-package models
+package api
 
 import (
 	"net/http"
@@ -14,22 +14,18 @@ type Comment struct {
 }
 
 // GetComment return a comment from specific id
-func GetComment(c *gin.Context) {
+func (s *Srv) GetComment(c *gin.Context) {
 	id := c.Param("id")
 	var comment Comment
-	db := openConnection()
-	defer db.Close()
-	db.Where("ID = ?", id).First(&comment)
+	s.DB.Where("ID = ?", id).First(&comment)
 	c.JSON(http.StatusOK, comment)
 }
 
 // PostComment create a comment
-func PostComment(c *gin.Context) {
+func (s *Srv) PostComment(c *gin.Context) {
 	var comment Comment
-	db := openConnection()
-	defer db.Close()
 	if err := c.Bind(&comment); err == nil {
-		db.Create(&comment)
+		s.DB.Create(&comment)
 		c.JSON(http.StatusOK, gin.H{"success": comment})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

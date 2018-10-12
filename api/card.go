@@ -1,4 +1,4 @@
-package models
+package api
 
 import (
 	"net/http"
@@ -17,22 +17,18 @@ type Card struct {
 }
 
 // GetCard return a card from specific id
-func GetCard(c *gin.Context) {
+func (s *Srv) GetCard(c *gin.Context) {
 	id := c.Param("id")
 	var card Card
-	db := openConnection()
-	defer db.Close()
-	db.Where("ID = ?", id).First(&card)
+	s.DB.Where("ID = ?", id).First(&card)
 	c.JSON(http.StatusOK, card)
 }
 
 // PostCard create a card
-func PostCard(c *gin.Context) {
+func (s *Srv) PostCard(c *gin.Context) {
 	var card Card
-	db := openConnection()
-	defer db.Close()
 	if err := c.Bind(&card); err == nil {
-		db.Create(&card)
+		s.DB.Create(&card)
 		c.JSON(http.StatusOK, gin.H{"success": card})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

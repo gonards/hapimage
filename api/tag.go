@@ -1,4 +1,4 @@
-package models
+package api
 
 import (
 	"net/http"
@@ -14,26 +14,22 @@ type Tag struct {
 }
 
 // GetTag return a tag from specific id
-func GetTag(c *gin.Context) {
+func (s *Srv) GetTag(c *gin.Context) {
 	id := c.Param("id")
 	var tag Tag
-	db := openConnection()
-	defer db.Close()
-	db.Where("ID = ?", id).First(&tag)
+	s.DB.Where("ID = ?", id).First(&tag)
 	c.JSON(http.StatusOK, tag)
 }
 
 // PostTag create a tag
-func PostTag(c *gin.Context) {
+func (s *Srv) PostTag(c *gin.Context) {
 	var tag Tag
-	db := openConnection()
-	defer db.Close()
 	if err := c.Bind(&tag); err == nil {
-		result := db.Where("name = ?", tag.Name).First(&tag)
+		result := s.DB.Where("name = ?", tag.Name).First(&tag)
 		if !result.RecordNotFound() {
-			db.Model(&tag).Update("weight", tag.Weight+1)
+			s.DB.Model(&tag).Update("weight", tag.Weight+1)
 		} else {
-			db.Create(&tag)
+			s.DB.Create(&tag)
 		}
 		c.JSON(http.StatusOK, gin.H{"success": tag})
 	} else {
