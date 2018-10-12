@@ -8,7 +8,7 @@ import (
 
 // Tag entity definition
 type Tag struct {
-	ID     uint   `gorm:"primary_key"`
+	ID     uint64   `gorm:"primary_key"`
 	Name   string `gorm:"UNIQUE"`
 	Weight int    `gorm:"default:1"`
 }

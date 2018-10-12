@@ -8,7 +8,7 @@ import (
 
 // Card entity definition
 type Card struct {
-	ID      uint `gorm:"primary_key"`
+	ID      uint64 `gorm:"primary_key"`
 	Type    string
 	Photo   Photo
 	PhotoID uint
@@ -33,4 +33,10 @@ func (s *Srv) PostCard(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
+}
+
+// GetCards return all Cards
+func (s *Srv) GetCards() {
+	var cards []Card
+	s.DB.Find(&cards)
 }

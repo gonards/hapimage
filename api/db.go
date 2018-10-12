@@ -7,8 +7,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-// Skeleton is used to create all databases needed
-func initSkeleton(sqlType string) {
+// InitSkeleton is used to create all databases needed
+func InitSkeleton(sqlType string) {
 	var db *gorm.DB
 	switch sqlType {
 	case "sqlite":

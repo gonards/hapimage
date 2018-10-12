@@ -39,6 +39,7 @@ func NewServer() {
 	v1 := r.Group("api/v1")
 	{
 		v1.GET("/photo/:id", s.GetPhoto)
+		v1.GET("/photo/:id/comments", s.GetComments)
 		v1.POST("/photo", s.PostPhoto)
 
 		v1.GET("/card/:id", s.GetCard)

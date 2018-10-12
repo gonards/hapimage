@@ -2,13 +2,14 @@ package api
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 // Photo entity definition
 type Photo struct {
-	ID          uint `gorm:"primary_key"`
+	ID          uint64 `gorm:"primary_key"`
 	Name        string
 	Description string
 	Credit      string
@@ -17,7 +18,7 @@ type Photo struct {
 	Country     Country
 	CountryID   uint
 	Tags        []Tag     `gorm:"many2many:photo_tags;"`
-	Comments    []Comment `gorm:"many2many:photo_comment;"`
+	Comments    []Comment 
 }
 
 // GetPhoto return a photo from specific id
@@ -37,4 +38,15 @@ func (s *Srv) PostPhoto(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
+}
+
+// GetComments return all comments from a photo
+func (s *Srv) GetComments(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	var comments []Comment
+	s.DB.Model(&Photo{ID: id}).Related(&comments)
+	c.JSON(http.StatusOK, gin.H{"success": comments})
 }

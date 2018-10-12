@@ -8,9 +8,10 @@ import (
 
 // Comment entity definition
 type Comment struct {
-	ID       uint `gorm:"primary_key"`
+	ID       uint64 `gorm:"primary_key"`
 	Username string
 	Content  string
+	PhotoID  uint64
 }
 
 // GetComment return a comment from specific id
