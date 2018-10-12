@@ -25,3 +25,16 @@ func GetCard(c *gin.Context) {
 	db.Where("ID = ?", id).First(&card)
 	c.JSON(http.StatusOK, card)
 }
+
+// PostCard create a card
+func PostCard(c *gin.Context) {
+	var card Card
+	db := openConnection()
+	defer db.Close()
+	if err := c.Bind(&card); err == nil {
+		db.Create(&card)
+		c.JSON(http.StatusOK, gin.H{"success": card})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+}

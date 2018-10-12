@@ -29,3 +29,16 @@ func GetPhoto(c *gin.Context) {
 	db.Where("ID = ?", id).First(&photo)
 	c.JSON(http.StatusOK, photo)
 }
+
+// PostPhoto create a photo
+func PostPhoto(c *gin.Context) {
+	var photo Photo
+	db := openConnection()
+	defer db.Close()
+	if err := c.Bind(&photo); err == nil {
+		db.Create(&photo)
+		c.JSON(http.StatusOK, gin.H{"success": photo})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+}
