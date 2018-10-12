@@ -2,13 +2,14 @@ package api
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 // Tag entity definition
 type Tag struct {
-	ID     uint64   `gorm:"primary_key"`
+	ID     uint64 `gorm:"primary_key"`
 	Name   string `gorm:"UNIQUE"`
 	Weight int    `gorm:"default:1"`
 }

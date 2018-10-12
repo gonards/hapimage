@@ -10,6 +10,7 @@ type Srv struct {
 	DB *gorm.DB
 }
 
+// initDB init DB connection to choosen sql type
 func (s *Srv) initDB(dbtype string) {
 	switch dbtype {
 	case "sqlite":
@@ -17,6 +18,7 @@ func (s *Srv) initDB(dbtype string) {
 	}
 }
 
+// closeDB close DB connection
 func (s *Srv) closeDB() {
 	s.DB.Close()
 }

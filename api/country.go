@@ -8,9 +8,9 @@ import (
 
 // Country entity definition
 type Country struct {
-	ID   uint64 `gorm:"primary_key"`
-	Name string
-	Photos Photo[]
+	ID     uint64 `gorm:"primary_key"`
+	Name   string
+	Photos []Photo
 }
 
 // GetCountry return a country from specific id

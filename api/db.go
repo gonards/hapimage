@@ -20,6 +20,7 @@ func InitSkeleton(sqlType string) {
 	db.AutoMigrate(&Photo{}, &Country{}, &Tag{}, &Comment{}, &Card{})
 }
 
+// initDBSqlite open connection to sqlite db 
 func initDBSqlite() *gorm.DB {
 	db, err := gorm.Open("sqlite3", "test.db")
 	if err != nil {

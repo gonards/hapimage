@@ -36,7 +36,7 @@ func (s *Srv) PostCard(c *gin.Context) {
 }
 
 // GetCards return all Cards
-func (s *Srv) GetCards() {
+func (s *Srv) GetCards(c *gin.Context) {
 	var cards []Card
 	s.DB.Find(&cards)
 }
