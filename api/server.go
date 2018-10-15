@@ -42,7 +42,7 @@ func NewServer() {
 	v1 := r.Group("api/v1")
 	{
 		v1.GET("/photo/:id", s.GetPhoto)
-		v1.GET("/photo/:id/comments", s.GetComments)
+		v1.GET("/photo/:id/comments", s.GetCommentsFromPhoto)
 		v1.GET("/photo/:id/tags", s.GetTagsFromPhoto)
 		v1.POST("/photo", s.PostPhoto)
 
@@ -51,12 +51,17 @@ func NewServer() {
 		v1.GET("/cards", s.GetCards)
 		v1.POST("/card", s.PostCard)
 
+		v1.GET("/place/:id", s.GetPlace)
+		v1.GET("/place/:id/photos", s.GetPhotosFromPlace)
+		v1.GET("/places", s.GetPlaces)
+		v1.POST("/place", s.PostPlace)
+
 		v1.GET("/comment/:id", s.GetComment)
 		v1.POST("/comment", s.PostComment)
 
 		v1.GET("/country/:id", s.GetCountry)
-		v1.GET("/countryies", s.GetCountries)
-		v1.GET("/country/:id/photos", s.GetPhotosFromCountry)
+		v1.GET("/country/:id/places", s.GetPlacesFromCountry)
+		v1.GET("/countries", s.GetCountries)
 		v1.POST("/country", s.PostCountry)
 
 		v1.GET("/tag/:id", s.GetTag)

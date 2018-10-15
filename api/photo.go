@@ -13,10 +13,9 @@ type Photo struct {
 	Name        string
 	Description string
 	Credit      string
-	Place       string
 	Like        int
-	Country     Country
-	CountryID   uint
+	Place       Place
+	PlaceID     uint64
 	Tags        []Tag `gorm:"many2many:photo_tags;"`
 	Comments    []Comment
 }
@@ -43,8 +42,8 @@ func (s *Srv) PostPhoto(c *gin.Context) {
 	}
 }
 
-// GetComments return all comments from a photo
-func (s *Srv) GetComments(c *gin.Context) {
+// GetCommentsFromPhoto return all comments from a photo
+func (s *Srv) GetCommentsFromPhoto(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

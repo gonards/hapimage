@@ -11,7 +11,7 @@ import (
 type Country struct {
 	ID     uint64 `gorm:"primary_key"`
 	Name   string
-	Photos []Photo
+	Places []Place
 }
 
 // GetCountry return a country from specific id
@@ -43,13 +43,13 @@ func (s *Srv) GetCountries(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": countries})
 }
 
-// GetPhotosFromCountry return all photos from a country
-func (s *Srv) GetPhotosFromCountry(c *gin.Context) {
+// GetPlacesFromCountry return all places from a country
+func (s *Srv) GetPlacesFromCountry(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
-	var photos []Photo
-	s.DB.Model(&Country{ID: id}).Related(&photos)
-	c.JSON(http.StatusOK, gin.H{"success": photos})
+	var places []Place
+	s.DB.Model(&Country{ID: id}).Related(&places)
+	c.JSON(http.StatusOK, gin.H{"success": places})
 }

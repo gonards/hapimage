@@ -58,7 +58,7 @@ func (s *Srv) GetTopTags(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
-	var tags []Tags
+	var tags []Tag
 	s.DB.Limit(nb).Order("weight desc").Find(&tags)
 	c.JSON(http.StatusOK, gin.H{"success": tags})
 }
