@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,11 +15,15 @@ type Card struct {
 	PhotoID uint
 	Caption string
 	Link    string
+	Country Country
 }
 
 // GetCard return a card from specific id
 func (s *Srv) GetCard(c *gin.Context) {
-	id := c.Param("id")
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
 	var card Card
 	s.DB.Where("ID = ?", id).First(&card)
 	c.JSON(http.StatusOK, card)
@@ -39,4 +44,16 @@ func (s *Srv) PostCard(c *gin.Context) {
 func (s *Srv) GetCards(c *gin.Context) {
 	var cards []Card
 	s.DB.Find(&cards)
+	c.JSON(http.StatusOK, gin.H{"success": cards})
+}
+
+// GetLastCards return last nb cards
+func (s *Srv) GetLastCards(c *gin.Context) {
+	nb, err := strconv.ParseUint(c.Param("nb"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	var cards []Card
+	s.DB.Limit(nb).Order("id desc").Find(&cards)
+	c.JSON(http.StatusOK, gin.H{"success": cards})
 }

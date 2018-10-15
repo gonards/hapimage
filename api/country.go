@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,4 +34,22 @@ func (s *Srv) PostCountry(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
+}
+
+// GetCountries return all countries
+func (s *Srv) GetCountries(c *gin.Context) {
+	var countries []Country
+	s.DB.Find(&countries)
+	c.JSON(http.StatusOK, gin.H{"success": countries})
+}
+
+// GetPhotosFromCountry return all photos from a country
+func (s *Srv) GetPhotosFromCountry(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	var photos []Photo
+	s.DB.Model(&Country{ID: id}).Related(&photos)
+	c.JSON(http.StatusOK, gin.H{"success": photos})
 }

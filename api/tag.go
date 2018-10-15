@@ -16,7 +16,10 @@ type Tag struct {
 
 // GetTag return a tag from specific id
 func (s *Srv) GetTag(c *gin.Context) {
-	id := c.Param("id")
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
 	var tag Tag
 	s.DB.Where("ID = ?", id).First(&tag)
 	c.JSON(http.StatusOK, tag)
@@ -47,4 +50,22 @@ func (s *Srv) GetPhotosFromTags(c *gin.Context) {
 	var photos []Photo
 	s.DB.Model(&Tag{ID: id}).Related(&photos)
 	c.JSON(http.StatusOK, gin.H{"success": photos})
+}
+
+// GetTopTags return top nb tag
+func (s *Srv) GetTopTags(c *gin.Context) {
+	nb, err := strconv.ParseUint(c.Param("nb"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	var tags []Tags
+	s.DB.Limit(nb).Order("weight desc").Find(&tags)
+	c.JSON(http.StatusOK, gin.H{"success": tags})
+}
+
+// GetTags return all tags
+func (s *Srv) GetTags(c *gin.Context) {
+	var tags []Tag
+	s.DB.Find(&tags)
+	c.JSON(http.StatusOK, gin.H{"success": tags})
 }

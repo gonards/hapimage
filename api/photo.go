@@ -23,7 +23,10 @@ type Photo struct {
 
 // GetPhoto return a photo from specific id
 func (s *Srv) GetPhoto(c *gin.Context) {
-	id := c.Param("id")
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
 	var photo Photo
 	s.DB.Where("ID = ?", id).First(&photo)
 	c.JSON(http.StatusOK, photo)

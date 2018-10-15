@@ -38,6 +38,7 @@ func NewServer() {
 	defer s.closeDB()
 
 	r := gin.Default()
+	r.Use(Cors())
 	v1 := r.Group("api/v1")
 	{
 		v1.GET("/photo/:id", s.GetPhoto)
@@ -46,6 +47,7 @@ func NewServer() {
 		v1.POST("/photo", s.PostPhoto)
 
 		v1.GET("/card/:id", s.GetCard)
+		v1.GET("/cards/last/:nb", s.GetLastCards)
 		v1.GET("/cards", s.GetCards)
 		v1.POST("/card", s.PostCard)
 
@@ -53,10 +55,14 @@ func NewServer() {
 		v1.POST("/comment", s.PostComment)
 
 		v1.GET("/country/:id", s.GetCountry)
+		v1.GET("/countryies", s.GetCountries)
+		v1.GET("/country/:id/photos", s.GetPhotosFromCountry)
 		v1.POST("/country", s.PostCountry)
 
 		v1.GET("/tag/:id", s.GetTag)
 		v1.GET("/tag/:id/photos", s.GetPhotosFromTags)
+		v1.GET("/tags", s.GetTags)
+		v1.GET("/tags/top/:nb", s.GetTopTags)
 		v1.POST("/tag", s.PostTag)
 	}
 	r.Run(":8080")
